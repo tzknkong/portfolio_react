@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./logo";
-import HeaderSocials from "./HeaderSocials";
+
 import "./header.css";
 
 const Header = () => {

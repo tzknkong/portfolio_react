@@ -3,9 +3,6 @@ import { MdOutlineEmail } from "react-icons/md";
 import "./contact.css";
 
 const Contact = () => {
-    const [message, setMessage] = useState(false);
-    const formRef = useRef();
-
     return (
         <section id="contact">
             <h5>Get In Touch</h5>

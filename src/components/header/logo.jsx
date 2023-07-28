@@ -1,6 +1,6 @@
 import React from "react";
 import CV from "../../assets/Tszkin_Kong_Resume.pdf";
-import { BsLinkedin, BsDownload, BsLink, BsCloudDownloadFill, BsCloudDownload } from "react-icons/bs";
+import { BsLinkedin, BsLink } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 
 const Logo = () => {
