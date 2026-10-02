@@ -1,28 +1,45 @@
-import React from "react";
-import Contact from "./components/contact/Contact";
-import Experience from "./components/experience/Experience";
-import WorkExperience from "./components//workExperience/workExperience";
-import Footer from "./components/footer/Footer";
-import Header from "./components/header/Header";
-import Intro from "./components/intro/Intro";
-// import Portfolio from "./components/portfolio/Portfolio";
-// import Testimonials from "./components/testimonials/Testimonials";
-import Topbar from "./components/topbar/Topbar";
+import React, { useEffect, useRef, useState } from 'react';
+import { FiArrowUpRight, FiArrowDown, FiGithub, FiLinkedin, FiDownload, FiMenu, FiX, FiPhone } from 'react-icons/fi';
+import portrait from './assets/me.jpg';
+import './App.css';
+const resume = `${process.env.PUBLIC_URL}/Tsz-Kin-Kong-Resume.docx`;
+const jobs = [
+ {dates:'Jul 2025 — Present',company:'Eagle Express Group',role:'Administrative Assistant',description:'Supporting logistics operations through clear client communication, accurate shipment records, internal web system maintenance, and functional testing.',tags:['System maintenance','Functional testing','Workflow improvement']},
+ {dates:'Nov 2021 — Aug 2024',company:'Octopus InfoTech Limited',role:'Web / App Developer',description:'Built a production CMS and digital library serving 100+ Hong Kong schools. Automated book supplier order workflows to reduce processing time by 65%, with efficient MySQL and MongoDB schemas.',tags:['React','TypeScript','Java','Spring Boot','Node.js']},
+ {dates:'Jan 2020 — Oct 2021',company:'Sing Tao News Corporation Limited',role:'Programmer',description:'Independently delivered the final development phase of an internal CMS and brought it into production. Translated editorial requirements into full-stack features for a 24/7 news operation.',tags:['PHP','Java','JavaScript','MySQL','MongoDB']},
+ {dates:'Aug 2019 — Dec 2019',company:'New World Development Company Limited',role:'IT Support Intern',description:'Supported system migrations, workstation upgrades, OS deployment, and technical troubleshooting. Created guides and maintained organized IT inventory records.',tags:['IT support','System migration','Documentation']}
+];
+const projects = [
+ {id:'01',type:'Education · Octopus InfoTech',title:'A library without limits.',description:'A production CMS and digital library platform deployed across primary and secondary schools in Hong Kong.',metric:'100+',label:'schools served',style:'library',tags:['React','Java','Spring Boot','MongoDB']},
+ {id:'02',type:'Operations · Octopus InfoTech',title:'Less manual. More momentum.',description:'Automated the order fulfillment lifecycle for major book suppliers, replacing time-consuming manual workflows.',metric:'65%',label:'less processing time',style:'workflow',tags:['Node.js','TypeScript','MySQL']},
+ {id:'03',type:'Publishing · Sing Tao',title:'Built for the news cycle.',description:'Delivered an internal CMS to production, with custom editorial tools supporting continuous news operations.',metric:'24/7',label:'news operations',style:'news',tags:['PHP','Java','JavaScript','MySQL']}
+];
+function Tags({items}) {return <div className="tags">{items.map(tag=><span key={tag}>{tag}</span>)}</div>}
+function ProjectVisual({type}) {
+ if(type==='library') return <div className="library-art" aria-hidden="true"><div className="mock-top">● ● ● <span>Library / Collection</span></div><div className="mock-heading">A world of knowledge.<small>Discover. Organize. Explore.</small></div><div className="books">{['DESIGN','SYSTEMS','IDEAS','CODE'].map((book,i)=><div key={book} className={`book book-${i}`}><span>{book}</span><i>VOL. 0{i+1}</i></div>)}</div></div>;
+ if(type==='workflow') return <div className="workflow-art" aria-hidden="true">{['Order received','Process & validate','Ready for fulfillment'].map((label,i)=><React.Fragment key={label}>{i>0&&<div className="flow-line"/>}<div className={`flow-node ${i===1?'active':''}`}>0{i+1}<span>{label}</span><b>✓</b></div></React.Fragment>)}<div className="flow-note">● AUTOMATION IN MOTION</div></div>;
+ return <div className="news-art" aria-hidden="true"><div className="news-top">EDITORIAL DESK <span>● LIVE</span></div><div className="news-layout"><div><div className="news-picture"/><div className="news-bar"/><div className="news-bar short"/></div><div className="news-side">{['Draft','Review','Published'].map(stage=><div key={stage}><i/><span>{stage}</span><b>✓</b></div>)}</div></div><div className="news-bottom">Stories moving. Systems running.<span>↗</span></div></div>;
+}
+export default function App(){
+ const root=useRef(null);const [menuOpen,setMenuOpen]=useState(false);const [active,setActive]=useState('home');
+ useEffect(()=>{
+  if(!window.IntersectionObserver)return;
+  const reveal=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');reveal.unobserve(entry.target)}}),{threshold:.08});
+  root.current.querySelectorAll('.reveal').forEach(el=>reveal.observe(el));
+  const sections=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)setActive(entry.target.id)}),{rootMargin:'-20% 0px -55% 0px'});
+  root.current.querySelectorAll('section[id]').forEach(el=>sections.observe(el));return()=>{reveal.disconnect();sections.disconnect()};
+ },[]);
+ function spotlight(event){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const bounds=event.currentTarget.getBoundingClientRect();event.currentTarget.style.setProperty('--pointer-x',`${event.clientX-bounds.left}px`);event.currentTarget.style.setProperty('--pointer-y',`${event.clientY-bounds.top}px`)}
+ return <div ref={root}><a className="skip-link" href="#main">Skip to content</a><header className="site-header"><a className="wordmark" href="#home" aria-label="Tsz Kin Kong home">TK<span>.</span></a><nav className={menuOpen?'nav open':'nav'} aria-label="Main navigation">{[['work','Work'],['about','About'],['experience','Experience']].map(([id,label])=><a key={id} className={active===id?'selected':''} href={`#${id}`} onClick={()=>setMenuOpen(false)}>{label}</a>)}<a className="nav-contact" href="#contact" onClick={()=>setMenuOpen(false)}>Let’s talk <FiArrowUpRight/></a></nav><button className="menu-toggle" aria-label={menuOpen?'Close navigation':'Open navigation'} aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?<FiX/>:<FiMenu/>}</button></header>
+ <main id="main"><section className="hero container" id="home"><div className="hero-copy"><p className="hero-role">Tsz Kin Kong / Full Stack Engineer</p><h1>Full stack.<br/><span className="accent-word">Real impact.</span></h1><p className="hero-description">I’m Tsz Kin Kong. I build web applications that turn complex workflows into simple, reliable experiences.</p><div className="hero-actions"><a className="button primary" href="#work">Explore my work <FiArrowUpRight/></a><a className="button text-button" href={resume} download>Download resume <FiDownload/></a></div><div className="hero-footnote"><span>5+ years of experience</span><i/><span>From interface to infrastructure</span></div></div><div className="hero-portrait"><div className="name-art" aria-hidden="true"><span>TK.</span><p>Interfaces.<br/>Systems.<br/>Results.</p></div><div className="hero-caption"><span>Tsz Kin Kong</span><span>Toronto, Ontario</span></div></div><a className="scroll-hint" href="#work"><FiArrowDown/> SCROLL TO EXPLORE</a></section>
+ <div className="impact-strip container reveal"><div><strong>5<span>+</span></strong><p>Years of engineering experience</p></div><div><strong>100<span>+</span></strong><p>Schools using delivered platforms</p></div><div><strong>65<span>%</span></strong><p>Reduction in order processing time</p></div><span className="strip-note">REAL SYSTEMS.<br/>MEASURABLE RESULTS.</span></div>
+ <section id="work" className="container section"><div className="section-heading reveal"><div><div className="eyebrow">01 / SELECTED WORK</div><h2>Solving problems.<br/><span>Making things work.</span></h2></div><p>A few of the production systems I’ve helped bring to life.</p></div><div className="project-grid">{projects.map(project=><article key={project.id} className="project-card reveal" onPointerMove={spotlight}><div className={`project-visual ${project.style}`}><ProjectVisual type={project.style}/><span className="project-number">Concept illustration</span></div><div className="project-content"><div className="eyebrow">{project.type}</div><h3>{project.title}</h3><p>{project.description}</p><div className="project-result"><strong>{project.metric}</strong><span>{project.label}</span></div><Tags items={project.tags}/></div></article>)}</div></section>
+ <section id="about" className="container section about-section"><div className="about-image reveal"><img src={portrait} alt="Cat from the original portfolio" loading="lazy"/><div className="portrait-caption"><span>BASED IN TORONTO, CANADA</span><FiArrowUpRight/></div></div><div className="about-copy reveal"><div className="eyebrow">02 / A LITTLE ABOUT ME</div><h2>The details matter.<br/><span>So does the big picture.</span></h2><p>I’m a Full Stack Engineer with 5+ years of experience developing and deploying web applications. My work spans education, publishing, and business operations, with a focus on reliable systems and practical improvements.</p><p>From independently shipping a production CMS to automating book fulfillment, I care about the whole journey: understanding the problem, designing the data, building the interface, testing carefully, and documenting what comes next.</p><a className="inline-link" href="https://www.linkedin.com/in/tk-kong/" target="_blank" rel="noreferrer">Get to know me on LinkedIn <FiArrowUpRight/></a></div></section>
+ <section className="container section skills-section"><div className="section-heading reveal"><div><div className="eyebrow">THE TOOLKIT</div><h2>Across the stack.</h2></div><p>The right tools, connected with care.</p></div><div className="skills-grid">{[{icon:'⌘',title:'Frontend',detail:'Interfaces that feel clear and intuitive.',skills:['React','JavaScript','TypeScript','HTML5','CSS']},{icon:'{ }',title:'Backend',detail:'The logic that keeps everything moving.',skills:['Java','Spring Boot','Node.js','PHP']},{icon:'▤',title:'Data & delivery',detail:'Reliable foundations for real-world systems.',skills:['MySQL','MongoDB','Functional testing','Documentation']}].map(group=><article className="skill-card reveal" key={group.title} onPointerMove={spotlight}><span className="skill-icon">{group.icon}</span><h3>{group.title}</h3><p>{group.detail}</p><Tags items={group.skills}/></article>)}</div></section>
+ <section id="experience" className="container section"><div className="section-heading reveal"><div><div className="eyebrow">03 / THE JOURNEY</div><h2>Experience that<br/><span>builds perspective.</span></h2></div><a className="inline-link" href={resume} download>Full resume <FiDownload/></a></div><div className="timeline">{jobs.map((job,i)=><article className="timeline-row reveal" key={job.company}><div className="timeline-date"><span className={i===0?'timeline-dot current':'timeline-dot'}/>{job.dates}{i===0&&<span className="current-label">CURRENT</span>}</div><div className="timeline-content"><span className="company">{job.company}</span><h3>{job.role}</h3><p>{job.description}</p><Tags items={job.tags}/></div></article>)}</div><div className="education reveal"><div className="eyebrow">EDUCATION</div><div><h3>BSc, Computing</h3><p>Coventry University · Jul 2021</p></div><div><h3>Higher Diploma, Software Engineering</h3><p>Hong Kong Institute of Vocational Education · Jul 2018</p></div><div><h3>Web Development</h3><p>CanTek · Toronto · Aug 2023</p></div></div></section>
+ <section id="contact" className="contact-section"><div className="container contact-inner reveal"><div className="eyebrow"><span className="status-dot"/> 04 / LET’S CONNECT</div><h2>Have something<br/>in <span>mind?</span></h2><p>Let’s talk about your team, your next project,<br className="desktop-break"/> or a problem worth solving.</p><a className="contact-email" href="mailto:kkinkong1997@gmail.com">kkinkong1997@gmail.com <FiArrowUpRight/></a><div className="contact-links"><a href="https://www.linkedin.com/in/tk-kong/" target="_blank" rel="noreferrer"><FiLinkedin/> LinkedIn <FiArrowUpRight/></a><a href="https://github.com/tzknkong" target="_blank" rel="noreferrer"><FiGithub/> GitHub <FiArrowUpRight/></a><a href="tel:+16474698953"><FiPhone/> +1 647 469 8953</a></div></div><div className="contact-orbit" aria-hidden="true"/></section>
+ </main><footer className="container footer"><a className="wordmark" href="#home">TK<span>.</span></a><p>© {new Date().getFullYear()} Tsz Kin Kong</p><a href="#home">Back to top <FiArrowUpRight/></a></footer></div>;
+}
 
-const App = () => {
-    return (
-        <>
-            <Header />
-            <Topbar />
-            <Intro />
-            <Experience />
-            <WorkExperience />
-            {/* <Portfolio /> */}
-            {/* <Testimonials /> */}
-            <Contact />
-            <Footer />
-        </>
-    );
-};
 
-export default App;
+
