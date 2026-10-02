@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FiArrowUpRight, FiArrowDown, FiGithub, FiLinkedin, FiDownload, FiMenu, FiX, FiPhone } from 'react-icons/fi';
 import portrait from './assets/me.jpg';
 import './App.css';
-const resume = `${process.env.PUBLIC_URL}/Tsz-Kin-Kong-Resume.docx`;
+const resume = `${process.env.PUBLIC_URL}/Tsz-Kin-Kong-Resume.pdf`;
 const jobs = [
  {dates:'Jul 2025 — Present',company:'Eagle Express Group',role:'Administrative Assistant',description:'Supporting logistics operations through clear client communication, accurate shipment records, internal web system maintenance, and functional testing.',tags:['System maintenance','Functional testing','Workflow improvement']},
  {dates:'Nov 2021 — Aug 2024',company:'Octopus InfoTech Limited',role:'Web / App Developer',description:'Built a production CMS and digital library serving 100+ Hong Kong schools. Automated book supplier order workflows to reduce processing time by 65%, with efficient MySQL and MongoDB schemas.',tags:['React','TypeScript','Java','Spring Boot','Node.js']},
